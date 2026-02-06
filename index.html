@@ -577,6 +577,46 @@
         Preferences saved successfully!
     </div>
 
+    <!-- Google Analytics (gtag.js) - Replace GA_MEASUREMENT_ID with your actual ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        // Initialize Google Analytics with consent mode
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        
+        // Set default consent to 'denied' for everything
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'personalization_storage': 'denied',
+            'functionality_storage': 'granted', // Essential cookies always allowed
+            'security_storage': 'granted'
+        });
+
+        // Initialize GA
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            'anonymize_ip': true // Anonymize IPs by default for privacy
+        });
+    </script>
+
+    <!-- Facebook Pixel (Optional) - Replace YOUR_PIXEL_ID -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        
+        // Don't initialize Facebook Pixel yet - wait for consent
+        window.fbqInitialized = false;
+    </script>
+
     <script>
         // Cookie Management System
         const cookieBanner = document.getElementById('cookieBanner');
@@ -591,7 +631,87 @@
                 setTimeout(() => {
                     cookieBanner.classList.add('show');
                 }, 500);
+            } else {
+                // User has already made a choice, apply their preferences
+                const preferences = JSON.parse(consent);
+                applyConsent(preferences);
             }
+        }
+
+        // Apply consent to all tracking services
+        function applyConsent(preferences) {
+            console.log('Applying cookie consent:', preferences);
+
+            // Google Analytics Consent Mode
+            if (typeof gtag === 'function') {
+                gtag('consent', 'update', {
+                    'analytics_storage': preferences.analytics ? 'granted' : 'denied',
+                    'ad_storage': preferences.marketing ? 'granted' : 'denied',
+                    'ad_user_data': preferences.marketing ? 'granted' : 'denied',
+                    'ad_personalization': preferences.marketing ? 'granted' : 'denied',
+                    'personalization_storage': preferences.personalization ? 'granted' : 'denied'
+                });
+
+                // Track consent event
+                if (preferences.analytics) {
+                    gtag('event', 'cookie_consent', {
+                        'event_category': 'consent',
+                        'event_label': 'cookies_accepted'
+                    });
+                }
+            }
+
+            // Facebook Pixel
+            if (preferences.marketing && typeof fbq === 'function' && !window.fbqInitialized) {
+                fbq('init', 'YOUR_PIXEL_ID'); // Replace with your actual Pixel ID
+                fbq('track', 'PageView');
+                fbq('track', 'CookieConsent', {consent_type: 'marketing_accepted'});
+                window.fbqInitialized = true;
+            }
+
+            // Set actual cookies based on preferences
+            if (preferences.analytics) {
+                setCookie('analytics_enabled', 'true', 365);
+            }
+            if (preferences.marketing) {
+                setCookie('marketing_enabled', 'true', 365);
+            }
+            if (preferences.personalization) {
+                setCookie('personalization_enabled', 'true', 365);
+            }
+
+            // Always set essential cookie
+            setCookie('cookie_consent', 'true', 365);
+        }
+
+        // Helper function to set cookies
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Lax";
+        }
+
+        // Helper function to delete cookies
+        function deleteCookie(name) {
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+        }
+
+        // Remove tracking cookies when rejected
+        function removeTrackingCookies() {
+            // Remove Google Analytics cookies
+            deleteCookie('_ga');
+            deleteCookie('_gid');
+            deleteCookie('_gat');
+            
+            // Remove Facebook cookies
+            deleteCookie('_fbp');
+            deleteCookie('_fbc');
+            
+            // Remove our tracking cookies
+            deleteCookie('analytics_enabled');
+            deleteCookie('marketing_enabled');
+            deleteCookie('personalization_enabled');
         }
 
         // Accept all cookies
@@ -604,6 +724,7 @@
                 timestamp: new Date().toISOString()
             };
             saveCookiePreferences(preferences);
+            applyConsent(preferences); // Apply consent to tracking services
             hideBanner();
             showSuccessMessage('All cookies accepted');
         }
@@ -618,6 +739,8 @@
                 timestamp: new Date().toISOString()
             };
             saveCookiePreferences(preferences);
+            removeTrackingCookies(); // Remove any existing tracking cookies
+            applyConsent(preferences); // Update consent mode
             hideBanner();
             showSuccessMessage('Only essential cookies enabled');
         }
@@ -632,6 +755,7 @@
                 timestamp: new Date().toISOString()
             };
             saveCookiePreferences(preferences);
+            applyConsent(preferences); // Apply consent to tracking services
             hideModal();
             hideBanner();
             showSuccessMessage('Your preferences have been saved');
@@ -641,7 +765,6 @@
         function saveCookiePreferences(preferences) {
             localStorage.setItem('cookieConsent', JSON.stringify(preferences));
             console.log('Cookie preferences saved:', preferences);
-            // Here you would typically also set actual cookies or notify analytics services
         }
 
         // Show/hide functions
