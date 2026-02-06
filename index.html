@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Coffee Co.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FAF7F2;
+            --dark-coffee: #2C1810;
+            --medium-coffee: #5D4037;
+            --accent-gold: #D4AF37;
+            --warm-gray: #8B7E74;
+            --shadow: rgba(44, 24, 16, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--dark-coffee);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--dark-coffee);
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            color: var(--medium-coffee);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--dark-coffee);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--dark-coffee);
+        }
+
+        .hero h1 strong {
+            font-weight: 600;
+            color: var(--medium-coffee);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--warm-gray);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--dark-coffee);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: 2px solid var(--dark-coffee);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gold);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .cta-button:hover {
+            color: var(--dark-coffee);
+            border-color: var(--accent-gold);
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 450px;
+            height: 450px;
+            background: linear-gradient(135deg, var(--medium-coffee), var(--dark-coffee));
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-55%) rotate(5deg);
+            }
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(44, 24, 16, 0.1);
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 -10px 40px rgba(44, 24, 16, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+
+        .cookie-banner.hide {
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(100%);
+            }
+        }
+
+        .cookie-content {
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .cookie-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-coffee);
+        }
+
+        .cookie-content p {
+            font-size: 0.95rem;
+            color: var(--warm-gray);
+            line-height: 1.6;
+        }
+
+        .cookie-content a {
+            color: var(--medium-coffee);
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .cookie-content a:hover {
+            color: var(--accent-gold);
+        }
+
+        .cookie-actions {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .cookie-btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-accept {
+            background: var(--dark-coffee);
+            color: var(--cream);
+            border: 2px solid var(--dark-coffee);
+        }
+
+        .btn-accept:hover {
+            background: var(--medium-coffee);
+            border-color: var(--medium-coffee);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .btn-reject {
+            background: transparent;
+            color: var(--medium-coffee);
+            border: 2px solid var(--medium-coffee);
+        }
+
+        .btn-reject:hover {
+            background: var(--medium-coffee);
+            color: var(--cream);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        /* Cookie Preferences Modal */
+        .cookie-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 24, 16, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cookie-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--cream);
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 2px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .cookie-modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-coffee);
+        }
+
+        .cookie-category {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(44, 24, 16, 0.1);
+        }
+
+        .cookie-category:last-child {
+            border-bottom: none;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-header h4 {
+            font-size: 1.1rem;
+            color: var(--dark-coffee);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--warm-gray);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--dark-coffee);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        input:disabled + .slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-actions button {
+            flex: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-image {
+                width: 300px;
+                height: 300px;
+                opacity: 0.05;
+            }
+
+            .cookie-banner {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cookie-actions {
+                flex-direction: column;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dark-coffee);
+            color: var(--cream);
+            padding: 1rem 2rem;
+            border-radius: 2px;
+            box-shadow: 0 5px 20px var(--shadow);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">ARTISAN</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#shop">Shop</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Crafted for <strong>Connoisseurs</strong></h1>
+            <p>Experience the finest single-origin beans, roasted to perfection in small batches. Each cup tells a story of dedication and artistry.</p>
+            <a href="#shop" class="cta-button">Explore Collection</a>
+        </div>
+        <div class="hero-image"></div>
+    </section>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <h3>We Value Your Privacy</h3>
+            <p>We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies. <a href="#" id="customizeLink">Customize preferences</a></p>
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-btn btn-reject" id="rejectBtn">Reject All</button>
+            <button class="cookie-btn btn-accept" id="acceptBtn">Accept All</button>
+        </div>
+    </div>
+
+    <!-- Cookie Preferences Modal -->
+    <div class="cookie-modal" id="cookieModal">
+        <div class="modal-content">
+            <h2>Cookie Preferences</h2>
+            
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4>Essential Cookies</h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked disabled>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p class="category-description">These cookies are necessary for the website to function and cannot be disabled.</p>
+            </div>
+
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4>Analytics Cookies</h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="analyticsCookies">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p class="category-description">Help us understand how visitors interact with our website by collecting and reporting information anonymously.</p>
+            </div>
+
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4>Marketing Cookies</h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="marketingCookies">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p class="category-description">Used to track visitors across websites to display relevant advertisements.</p>
+            </div>
+
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4>Personalization Cookies</h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="personalizationCookies">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p class="category-description">Enable the website to remember choices you make and provide enhanced features.</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="cookie-btn btn-reject" id="modalRejectBtn">Reject All</button>
+                <button class="cookie-btn btn-accept" id="modalAcceptBtn">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        Preferences saved successfully!
+    </div>
+
+    <script>
+        // Cookie Management System
+        const cookieBanner = document.getElementById('cookieBanner');
+        const cookieModal = document.getElementById('cookieModal');
+        const successMessage = document.getElementById('successMessage');
+
+        // Check if user has already made a choice
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                // Show banner after a short delay for better UX
+                setTimeout(() => {
+                    cookieBanner.classList.add('show');
+                }, 500);
+            }
+        }
+
+        // Accept all cookies
+        function acceptAllCookies() {
+            const preferences = {
+                essential: true,
+                analytics: true,
+                marketing: true,
+                personalization: true,
+                timestamp: new Date().toISOString()
+            };
+            saveCookiePreferences(preferences);
+            hideBanner();
+            showSuccessMessage('All cookies accepted');
+        }
+
+        // Reject all cookies (except essential)
+        function rejectAllCookies() {
+            const preferences = {
+                essential: true,
+                analytics: false,
+                marketing: false,
+                personalization: false,
+                timestamp: new Date().toISOString()
+            };
+            saveCookiePreferences(preferences);
+            hideBanner();
+            showSuccessMessage('Only essential cookies enabled');
+        }
+
+        // Save custom preferences
+        function saveCustomPreferences() {
+            const preferences = {
+                essential: true,
+                analytics: document.getElementById('analyticsCookies').checked,
+                marketing: document.getElementById('marketingCookies').checked,
+                personalization: document.getElementById('personalizationCookies').checked,
+                timestamp: new Date().toISOString()
+            };
+            saveCookiePreferences(preferences);
+            hideModal();
+            hideBanner();
+            showSuccessMessage('Your preferences have been saved');
+        }
+
+        // Save to localStorage
+        function saveCookiePreferences(preferences) {
+            localStorage.setItem('cookieConsent', JSON.stringify(preferences));
+            console.log('Cookie preferences saved:', preferences);
+            // Here you would typically also set actual cookies or notify analytics services
+        }
+
+        // Show/hide functions
+        function hideBanner() {
+            cookieBanner.classList.add('hide');
+            setTimeout(() => {
+                cookieBanner.classList.remove('show', 'hide');
+            }, 400);
+        }
+
+        function showModal() {
+            cookieModal.classList.add('show');
+            loadCurrentPreferences();
+        }
+
+        function hideModal() {
+            cookieModal.classList.remove('show');
+        }
+
+        function showSuccessMessage(message) {
+            successMessage.textContent = message;
+            successMessage.classList.add('show');
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Load current preferences into modal
+        function loadCurrentPreferences() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (consent) {
+                const preferences = JSON.parse(consent);
+                document.getElementById('analyticsCookies').checked = preferences.analytics;
+                document.getElementById('marketingCookies').checked = preferences.marketing;
+                document.getElementById('personalizationCookies').checked = preferences.personalization;
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('acceptBtn').addEventListener('click', acceptAllCookies);
+        document.getElementById('rejectBtn').addEventListener('click', rejectAllCookies);
+        document.getElementById('customizeLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            showModal();
+        });
+        document.getElementById('modalAcceptBtn').addEventListener('click', saveCustomPreferences);
+        document.getElementById('modalRejectBtn').addEventListener('click', () => {
+            rejectAllCookies();
+            hideModal();
+        });
+
+        // Close modal when clicking outside
+        cookieModal.addEventListener('click', (e) => {
+            if (e.target === cookieModal) {
+                hideModal();
+            }
+        });
+
+        // Initialize
+        checkCookieConsent();
+    </script>
+</body>
+</html>
